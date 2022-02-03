@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="56970794-3592-46d2-838a-7d262213354a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="product" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="from" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="paid" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     products.`name` AS product,
+     purchased_items.`quantity` AS quantity,
+     purchased_items.`purchase_price` AS price,
+     suppliers.`name` AS supplier,
+     purchases.`purchase_date` AS date
+FROM
+     `products` products INNER JOIN `purchased_items` purchased_items ON products.`product_id` = purchased_items.`product_id`
+     INNER JOIN `purchases` purchases ON purchased_items.`purchase_id` = purchases.`purchase_id`
+     INNER JOIN `suppliers` suppliers ON purchases.`supplier_id` = suppliers.`supplier_id`
+WHERE
+	purchased_items.`product_id` = products.`product_id`
+ 	AND purchased_items.`purchase_id` = purchases.`purchase_id`
+ 	AND purchases.`supplier_id` = suppliers.`supplier_id`]]>
+	</queryString>
+	<field name="product" class="java.lang.String"/>
+	<field name="quantity" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="price" class="java.lang.Double"/>
+	<field name="supplier" class="java.lang.String"/>
+	<field name="date" class="java.sql.Date"/>
+	<variable name="TOTAL_PRICE" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{quantity}*$F{price}]]></variableExpression>
+	</variable>
+	<variable name="DUE" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{TOTAL_PRICE}-Double.valueOf($P{paid})]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="32" y="16" width="523" height="44" uuid="098bbec0-c8a5-4a6c-a048-176ba77bc11d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="36"/>
+				</textElement>
+				<text><![CDATA[Purchase Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="48" splitType="Stretch">
+			<textField pattern="yyyy/MM/dd">
+				<reportElement x="455" y="0" width="100" height="20" uuid="a5723f2f-560b-4f1f-b86c-3eb30618afec"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="45" height="20" uuid="192feb97-6927-4919-b217-ae1def62ca7b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[From	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="45" height="20" uuid="9ed8f88e-f22d-49c3-add5-70a49ece1347"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[To	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="0" width="45" height="20" uuid="a20330f1-cdaa-4178-8319-f123719aa4d5"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Date : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="45" y="0" width="100" height="20" uuid="aca1879a-eaf4-4459-92b8-12ded8612167"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{from}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="45" y="20" width="100" height="20" uuid="54cfc531-e792-424d-885f-c08bf6a2e8be"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{to}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="37" y="0" width="150" height="20" uuid="c557c738-4f7f-4c42-8c14-07e9e707fd0b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Product]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="187" y="0" width="92" height="20" uuid="020ea66a-e184-47a3-8596-b8d04c480091"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Supplier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="37" height="20" uuid="a9787747-4134-41a4-b348-92c9002cc4f1"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[S.N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="0" width="92" height="20" uuid="a50a1798-fe85-4ed0-a338-d6a1ea14180c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="463" y="0" width="92" height="20" uuid="fb9d2048-e3ae-4a83-a2a7-c07c781c9228"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="371" y="0" width="92" height="20" uuid="6102010b-0b75-4941-ad57-4ee267859cb4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="37" y="0" width="150" height="20" uuid="4f934a71-3ee8-469f-b899-dcab6e9bdc38"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="187" y="0" width="84" height="20" uuid="470e7205-4153-42e3-bd8a-ff76fb0734ba"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{supplier}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="279" y="0" width="92" height="20" uuid="d3c59286-0154-4598-bb4c-3bbcf101bc9e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date}.toLocalDate()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="371" y="0" width="92" height="20" uuid="e02e8201-e27d-4e5b-8e0a-b0dbc7ba9453"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="0" width="92" height="20" uuid="76648c34-dcc6-495c-8dd6-6982bfeff4ad"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="37" height="20" uuid="099cab2e-00ec-4bf2-886f-3e137ae8b6e8"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="47" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="73" splitType="Stretch">
+			<staticText>
+				<reportElement x="415" y="0" width="40" height="20" uuid="9a217c49-e163-4fe3-8ed6-c61afe52f813"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Total :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="415" y="20" width="40" height="20" uuid="8af56983-e866-4a25-aa6f-b9117e3d77cd"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Paid :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="415" y="40" width="40" height="20" uuid="1110c9af-a30a-4ac2-8e35-c5d60d784979"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Due :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20" uuid="e603c4d9-e4ba-4867-a568-cc929d36de15"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_PRICE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="20" width="100" height="20" uuid="c8278ce9-9ae5-4c24-942d-600e23c3e82d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{paid}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="40" width="100" height="20" uuid="2f0479fa-b0e9-487c-b18b-15f55a27a002"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DUE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
